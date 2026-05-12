@@ -1,0 +1,14 @@
+Options -MultiViews
+RewriteEngine On
+
+# Serve static files directly - don't pass to Flask
+RewriteCond %{REQUEST_URI} ^/static/
+RewriteRule ^ - [L]
+
+# Route everything else to Flask via WSGI
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ /passenger_wsgi.py/$1 [QSA,L]
+
+# Security headers
+Header always set X-Frame-Options SAMEORIGIN
+Header always set X-Content-Type-Options nosniff

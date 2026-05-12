@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explore — LinkVault</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/explore.css">
+</head>
+<body class="explore-body">
+
+<header class="explore-header">
+  <div class="explore-nav">
+    <a href="/" class="logo">
+      <svg width="24" height="24" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#6366f1"/><path d="M8 14h12M14 8l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>LinkVault</span>
+    </a>
+    <div class="explore-search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="exploreSearch" placeholder="Search public links…" oninput="onExploreSearch(this.value)">
+    </div>
+    <div id="exploreNavAuth">
+      <a href="/dashboard" class="btn-primary">My Dashboard →</a>
+    </div>
+  </div>
+</header>
+
+<div class="explore-hero">
+  <h1>Discover public links</h1>
+  <p>Resources, tools, and articles shared by the community</p>
+  <div class="explore-counts">
+    <span id="exploreTotal">—</span> links shared publicly
+  </div>
+</div>
+
+<!-- Trending tags -->
+<div class="trending-tags-wrap">
+  <div class="trending-label">Trending tags</div>
+  <div id="trendingTags" class="trending-tags"></div>
+</div>
+
+<!-- Links grid -->
+<div class="explore-content">
+  <div id="exploreGrid" class="links-grid explore-grid"></div>
+  <div id="exploreEmpty" class="empty-state hidden">
+    <div class="empty-icon">🌐</div>
+    <h3>No public links yet</h3>
+    <p>Be the first to share something!</p>
+    <a href="/" class="btn-primary">Add your links →</a>
+  </div>
+  <div id="exploreLoadMore" class="load-more-wrap hidden">
+    <button class="btn-ghost" onclick="exploreLoadMore()">Load more</button>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script src="/static/js/explore.js"></script>
+</body>
+</html>

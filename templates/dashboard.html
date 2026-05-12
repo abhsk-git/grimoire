@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — LinkVault</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body class="app-body">
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">
+      <svg width="24" height="24" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#6366f1"/><path d="M8 14h12M14 8l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>LinkVault</span>
+    </div>
+    <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="nav-item active" onclick="setView('all')" data-view="all">
+      <span class="nav-icon">🔗</span><span class="nav-label">All Links</span>
+    </a>
+    <a class="nav-item" onclick="setView('public')" data-view="public">
+      <span class="nav-icon">🌐</span><span class="nav-label">Public</span>
+    </a>
+    <a class="nav-item" onclick="setView('private')" data-view="private">
+      <span class="nav-icon">🔒</span><span class="nav-label">Private</span>
+    </a>
+    <a class="nav-item" href="/explore">
+      <span class="nav-icon">🧭</span><span class="nav-label">Explore</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-section">
+    <div class="section-label">
+      <span>Collections</span>
+      <button class="btn-icon" onclick="openNewCollection()" title="New collection">+</button>
+    </div>
+    <div id="collectionsList" class="collections-list">
+      <div class="loading-sm">Loading…</div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="section-label"><span>Tags</span></div>
+    <div id="tagsList" class="tags-cloud"></div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-chip" id="userChip">
+      <img id="userAvatar" src="" alt="" class="avatar-sm">
+      <div class="user-info">
+        <span id="userName" class="user-name">…</span>
+        <span id="userEmail" class="user-email">…</span>
+      </div>
+      <button class="btn-icon" onclick="toggleUserMenu()" title="Account">⋮</button>
+    </div>
+    <div class="user-menu hidden" id="userMenu">
+      <a onclick="openProfile()">⚙ Profile</a>
+      <a href="/explore">🧭 Explore</a>
+      <a onclick="doLogout()" class="danger">↩ Sign out</a>
+    </div>
+  </div>
+</aside>
+
+<!-- Main content -->
+<main class="main-content">
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="btn-icon mobile-menu" onclick="toggleSidebar()">☰</button>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search links, tags, notes…" oninput="onSearch(this.value)">
+        <span class="search-clear hidden" id="searchClear" onclick="clearSearch()">✕</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="view-toggles">
+        <button class="view-btn active" id="gridBtn" onclick="setLayout('grid')" title="Grid view">⊞</button>
+        <button class="view-btn" id="listBtn" onclick="setLayout('list')" title="List view">☰</button>
+      </div>
+      <button class="btn-primary" onclick="openAddModal()">+ Add Link</button>
+    </div>
+  </header>
+
+  <!-- Stats bar -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-chip"><span class="stat-n" id="statTotal">—</span><span class="stat-l">Total links</span></div>
+    <div class="stat-chip"><span class="stat-n" id="statPublic">—</span><span class="stat-l">Public</span></div>
+    <div class="stat-chip"><span class="stat-n" id="statVisits">—</span><span class="stat-l">Visits</span></div>
+    <div class="stat-chip"><span class="stat-n" id="statCols">—</span><span class="stat-l">Collections</span></div>
+  </div>
+
+  <!-- Links area -->
+  <div class="links-header">
+    <h2 class="links-title" id="linksTitle">All Links</h2>
+    <span class="links-count" id="linksCount"></span>
+  </div>
+
+  <div id="linksGrid" class="links-grid"></div>
+  <div id="emptyState" class="empty-state hidden">
+    <div class="empty-icon">🔗</div>
+    <h3>No links yet</h3>
+    <p>Add your first link to get started</p>
+    <button class="btn-primary" onclick="openAddModal()">+ Add Link</button>
+  </div>
+  <div id="loadMoreWrap" class="load-more-wrap hidden">
+    <button class="btn-ghost" id="loadMoreBtn" onclick="loadMore()">Load more</button>
+  </div>
+</main>
+
+<!-- ── Add / Edit Link Modal ── -->
+<div class="modal-overlay hidden" id="linkModalOverlay" onclick="closeModal('linkModal')"></div>
+<div class="modal hidden" id="linkModal">
+  <div class="modal-header">
+    <h3 id="modalTitle">Add Link</h3>
+    <button class="btn-icon" onclick="closeModal('linkModal')">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="field">
+      <label>URL <span class="req">*</span></label>
+      <div class="url-row">
+        <input type="url" id="linkUrl" placeholder="https://example.com" oninput="onUrlInput()">
+        <button class="btn-fetch" id="fetchBtn" onclick="fetchMeta()" title="Auto-fetch title & preview">⚡ Fetch</button>
+      </div>
+    </div>
+    <div id="fetchPreview" class="fetch-preview hidden">
+      <img id="previewFavicon" src="" alt="" class="preview-favicon">
+      <span id="previewDomain" class="preview-domain"></span>
+      <span class="preview-check">✓ fetched</span>
+    </div>
+    <div class="field">
+      <label>Title</label>
+      <input type="text" id="linkTitle" placeholder="Give it a title">
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea id="linkDesc" rows="2" placeholder="What's this about?"></textarea>
+    </div>
+    <div class="field">
+      <label>Tags <span class="hint">(comma separated)</span></label>
+      <input type="text" id="linkTags" placeholder="design, tool, reference">
+      <div id="tagSuggestions" class="tag-suggestions"></div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Collection</label>
+        <select id="linkCollection">
+          <option value="">— None —</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Visibility</label>
+        <div class="toggle-group">
+          <label class="toggle-opt">
+            <input type="radio" name="visibility" value="0" id="visPrivate" checked>
+            <span>🔒 Private</span>
+          </label>
+          <label class="toggle-opt">
+            <input type="radio" name="visibility" value="1" id="visPublic">
+            <span>🌐 Public</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Notes <span class="hint">(optional)</span></label>
+      <textarea id="linkNotes" rows="2" placeholder="Personal notes…"></textarea>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-ghost" onclick="closeModal('linkModal')">Cancel</button>
+    <button class="btn-primary" id="saveLinkBtn" onclick="saveLink()">Save Link</button>
+  </div>
+</div>
+
+<!-- ── New Collection Modal ── -->
+<div class="modal-overlay hidden" id="colModalOverlay" onclick="closeModal('colModal')"></div>
+<div class="modal hidden" id="colModal">
+  <div class="modal-header">
+    <h3>New Collection</h3>
+    <button class="btn-icon" onclick="closeModal('colModal')">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="field">
+      <label>Name</label>
+      <input type="text" id="colName" placeholder="e.g. Dev Resources">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Icon</label>
+        <div class="emoji-picker" id="emojiPicker">
+          <span class="emoji-opt selected" onclick="selectEmoji(this)">📁</span>
+          <span class="emoji-opt" onclick="selectEmoji(this)">⭐</span>
+          <span class="emoji-opt" onclick="selectEmoji(this)">💼</span>
+          <span class="emoji-opt" onclick="selectEmoji(this)">🎨</span>
+          <span class="emoji-opt" onclick="selectEmoji(this)">🛠</span>
+          <span class="emoji-opt" onclick="selectEmoji(this)">📚</span>
+          <span class="emoji-opt" onclick="selectEmoji(this)">🎯</span>
+          <span class="emoji-opt" onclick="selectEmoji(this)">💡</span>
+          <span class="emoji-opt" onclick="selectEmoji(this)">🔬</span>
+          <span class="emoji-opt" onclick="selectEmoji(this)">🚀</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Color</label>
+        <div class="color-picker" id="colorPicker">
+          <span class="color-swatch selected" style="background:#6366f1" data-color="#6366f1" onclick="selectColor(this)"></span>
+          <span class="color-swatch" style="background:#ec4899" data-color="#ec4899" onclick="selectColor(this)"></span>
+          <span class="color-swatch" style="background:#f59e0b" data-color="#f59e0b" onclick="selectColor(this)"></span>
+          <span class="color-swatch" style="background:#10b981" data-color="#10b981" onclick="selectColor(this)"></span>
+          <span class="color-swatch" style="background:#3b82f6" data-color="#3b82f6" onclick="selectColor(this)"></span>
+          <span class="color-swatch" style="background:#ef4444" data-color="#ef4444" onclick="selectColor(this)"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-ghost" onclick="closeModal('colModal')">Cancel</button>
+    <button class="btn-primary" onclick="saveCollection()">Create</button>
+  </div>
+</div>
+
+<!-- ── Profile Modal ── -->
+<div class="modal-overlay hidden" id="profileModalOverlay" onclick="closeModal('profileModal')"></div>
+<div class="modal hidden" id="profileModal">
+  <div class="modal-header">
+    <h3>Profile</h3>
+    <button class="btn-icon" onclick="closeModal('profileModal')">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="profile-avatar-row">
+      <img id="profileAvatar" src="" class="avatar-lg" alt="">
+      <div>
+        <div id="profileNameDisplay" class="profile-name"></div>
+        <div id="profileEmailDisplay" class="profile-email"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Display Name</label>
+      <input type="text" id="profileName" placeholder="Your name">
+    </div>
+    <div class="field">
+      <label>Bio</label>
+      <textarea id="profileBio" rows="2" placeholder="Tell us a bit about yourself…"></textarea>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-ghost" onclick="closeModal('profileModal')">Cancel</button>
+    <button class="btn-primary" onclick="saveProfile()">Save</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast hidden" id="toast"></div>
+
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>
