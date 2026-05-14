@@ -13,7 +13,7 @@
     if (!p) return;
     if (p.classList.contains('hidden')) {
       p.classList.remove('hidden');
-      updatePickerState(document.documentElement.getAttribute('data-theme') || 'dark');
+      updatePickerState(document.documentElement.getAttribute('data-theme') || 'geek');
     } else {
       p.classList.add('hidden');
     }
@@ -42,7 +42,7 @@
   });
 
   document.addEventListener('DOMContentLoaded', function () {
-    updatePickerState(document.documentElement.getAttribute('data-theme') || 'dark');
+    updatePickerState(document.documentElement.getAttribute('data-theme') || 'geek');
   });
 
   window.applyTheme = applyTheme;
