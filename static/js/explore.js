@@ -13,10 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
 async function checkAuth() {
   try {
     const r = await fetch('/api/auth/me', { credentials: 'include' });
+    const nav = document.getElementById('exploreNavAuth');
     if (r.ok) {
-      const user = await r.json();
-      document.getElementById('exploreNavAuth').innerHTML =
-        `<a href="/dashboard" class="btn-primary">My Dashboard <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>`;
+      nav.innerHTML = `<a href="/dashboard" class="btn-primary">My Dashboard <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>`;
+    } else {
+      nav.innerHTML = `<button class="btn-primary" onclick="showPanel('login')">Login</button>`;
     }
   } catch {}
 }

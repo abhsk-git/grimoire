@@ -24,7 +24,7 @@
 }
 .explore-search-wrap input::placeholder { color: var(--text3); }
 .search-icon { color: var(--text3); display: flex; flex-shrink: 0; }
-#exploreNavAuth { margin-left: auto; }
+#exploreNavAuth { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 
 /* ── Hero ────────────────────────────────────────────────────── */
 .explore-hero {

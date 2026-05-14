@@ -1,9 +1,4 @@
 // ── Auth JS ──────────────────────────────────────────────────
-// Redirect if already logged in
-fetch('/api/auth/me', { credentials: 'include' })
-  .then(r => { if (r.ok) window.location.href = '/dashboard'; })
-  .catch(() => {});
-
 function showPanel(type) {
   document.getElementById('authPanel').classList.add('open');
   document.getElementById('authOverlay').classList.remove('hidden');

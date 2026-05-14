@@ -80,10 +80,13 @@ def optional_auth(f):
 # ─── Pages ─────────────────────────────────────────────────────────────────────
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return redirect('/explore')
 
 @app.route('/dashboard')
 def dashboard():
+    token = request.cookies.get('token')
+    if not verify_token(token):
+        return redirect('/explore')
     return render_template('dashboard.html')
 
 @app.route('/explore')

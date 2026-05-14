@@ -63,7 +63,7 @@
 
   <div class="sidebar-footer">
     <div class="user-chip" id="userChip">
-      <img id="userAvatar" src="" alt="" class="avatar-sm">
+      <img id="userAvatar" src="" alt="" class="avatar-sm" onclick="openProfile()" style="cursor:pointer" title="Edit profile">
       <div class="user-info">
         <span id="userName" class="user-name">…</span>
         <span id="userEmail" class="user-email">…</span>
@@ -73,13 +73,15 @@
       </button>
     </div>
     <div class="user-menu hidden" id="userMenu">
-      <a onclick="openProfile()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Profile
-      </a>
-      <a href="/explore">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-        Explore
+      <a class="menu-theme-row" onclick="return false">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/></svg>
+        Theme
+        <div class="theme-mini-picks">
+          <span onclick="applyTheme('light')" title="Light" style="background:linear-gradient(135deg,#f7f8fc 50%,#4f46e5 50%)"></span>
+          <span onclick="applyTheme('dark')" title="Dark" style="background:linear-gradient(135deg,#07070e 50%,#6366f1 50%)"></span>
+          <span onclick="applyTheme('geek')" title="Geek" style="background:linear-gradient(135deg,#f4f7f2 50%,#2f8d46 50%)"></span>
+          <span onclick="applyTheme('midnight')" title="Midnight" style="background:linear-gradient(135deg,#020c18 50%,#00d4c0 50%)"></span>
+        </div>
       </a>
       <a onclick="doLogout()" class="danger">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
