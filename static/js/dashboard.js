@@ -59,16 +59,19 @@ function buildCard(link) {
   const domain = (() => { try { return new URL(link.url).hostname.replace('www.',''); } catch { return ''; } })();
   const tags = link.tags ? link.tags.split(',').map(t => t.trim()).filter(Boolean) : [];
   const date = new Date(link.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-  const colBadge = link.collection_name ? `<span class="col-badge" style="background:${link.collection_color}22;color:${link.collection_color}">${link.collection_name}</span>` : '';
-
-  const imgHtml = link.image
-    ? `<img class="card-image" src="${esc(link.image)}" alt="" onerror="this.style.display='none'">`
-    : `<div class="card-image no-img">${getDomainEmoji(domain)}</div>`;
+  const colBadge = link.collection_name
+    ? `<span class="col-badge" style="background:${link.collection_color}1e;color:${link.collection_color};border:1px solid ${link.collection_color}40">${esc(link.collection_name)}</span>`
+    : '';
+  const initial = domain ? domain[0].toUpperCase() : '?';
 
   return `
   <div class="link-card" data-id="${link.id}">
+    <div class="card-media ${link.image ? '' : 'card-media--empty'}">
+      ${link.image
+        ? `<img class="card-image" src="${esc(link.image)}" alt="" onerror="this.parentElement.classList.add('card-media--empty');this.remove()">`
+        : `<div class="domain-initial">${initial}</div>`}
+    </div>
     <span class="${link.is_public ? 'badge-public' : 'badge-private'}">${link.is_public ? 'Public' : 'Private'}</span>
-    ${state.layout !== 'list' ? imgHtml : ''}
     <div class="card-body">
       <div class="card-top">
         <img class="card-favicon" src="${esc(link.favicon || '')}" onerror="this.style.display='none'" alt="">
@@ -77,13 +80,13 @@ function buildCard(link) {
       </div>
       <div class="card-title">${esc(link.title || domain || 'Untitled')}</div>
       ${link.description ? `<div class="card-desc">${esc(link.description)}</div>` : ''}
-      ${tags.length ? `<div class="card-tags">${tags.map(t => `<span class="card-tag" onclick="filterTag('${esc(t)}',event)">#${esc(t)}</span>`).join('')}</div>` : ''}
+      ${tags.length ? `<div class="card-tags">${tags.slice(0,4).map(t => `<span class="card-tag" onclick="filterTag('${esc(t)}',event)">#${esc(t)}</span>`).join('')}</div>` : ''}
       <div class="card-footer">
-        <span class="card-meta">${date}${link.visit_count ? ` · ${link.visit_count} visits` : ''}</span>
+        <span class="card-meta">${date}${link.visit_count ? ` · ${link.visit_count} views` : ''}</span>
         <div class="card-actions">
-          <button class="btn-icon" onclick="openLink(${link.id},'${esc(link.url)}',event)" title="Open">↗</button>
-          <button class="btn-icon" onclick="editLink(${link.id},event)" title="Edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-          <button class="btn-icon" onclick="deleteLink(${link.id},event)" title="Delete" style="color:var(--danger)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+          <button class="card-act" onclick="openLink(${link.id},'${esc(link.url)}',event)" title="Open"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+          <button class="card-act" onclick="editLink(${link.id},event)" title="Edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="card-act danger" onclick="deleteLink(${link.id},event)" title="Delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
         </div>
       </div>
     </div>
@@ -91,16 +94,7 @@ function buildCard(link) {
 }
 
 function getDomainEmoji(domain) {
-  if (!domain) return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
-  if (domain.includes('github')) return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>';
-  if (domain.includes('youtube')) return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>';
-  if (domain.includes('twitter') || domain.includes('x.com')) return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l16 16M4 20L20 4"/></svg>';
-  if (domain.includes('medium')) return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>';
-  if (domain.includes('reddit')) return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>';
-  if (domain.includes('stackoverflow')) return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
-  if (domain.includes('notion')) return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
-  if (domain.includes('figma')) return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M6 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0z"/></svg>';
-  return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
+  return `<div class="domain-initial">${domain ? domain[0].toUpperCase() : '?'}</div>`;
 }
 
 // ── Link Actions ──────────────────────────────────────────────
@@ -241,10 +235,10 @@ function renderCollections() {
   const el = document.getElementById('collectionsList');
   el.innerHTML = state.collections.map(c => `
     <div class="col-item ${state.currentCollection == c.id ? 'active' : ''}" onclick="filterCollection(${c.id})">
-      <span class="col-icon">${c.icon}</span>
+      <span class="col-dot" style="background:${c.color || '#6366f1'}"></span>
       <span class="col-name">${esc(c.name)}</span>
       <span class="col-count">${c.link_count}</span>
-      <button class="col-del" onclick="deleteCollection(${c.id},event)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <button class="col-del" onclick="deleteCollection(${c.id},event)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>`).join('') || '<div class="loading-sm">No collections yet</div>';
 }
 
@@ -252,7 +246,7 @@ function renderCollectionSelect() {
   const sel = document.getElementById('linkCollection');
   const cur = sel.value;
   sel.innerHTML = '<option value="">— None —</option>' +
-    state.collections.map(c => `<option value="${c.id}">${c.icon} ${esc(c.name)}</option>`).join('');
+    state.collections.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
   if (cur) sel.value = cur;
 }
 

@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Explore — LinkVault</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/style.css">
 <link rel="stylesheet" href="/static/css/explore.css">
 </head>
@@ -18,11 +19,11 @@
       <span>LinkVault</span>
     </a>
     <div class="explore-search-wrap">
-      <span class="search-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <span class="search-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
       <input type="text" id="exploreSearch" placeholder="Search public links…" oninput="onExploreSearch(this.value)">
     </div>
     <div id="exploreNavAuth">
-      <a href="/dashboard" class="btn-primary">My Dashboard →</a>
+      <a href="/dashboard" class="btn-primary">My Dashboard</a>
     </div>
   </div>
 </header>
@@ -31,24 +32,25 @@
   <h1>Discover public links</h1>
   <p>Resources, tools, and articles shared by the community</p>
   <div class="explore-counts">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
     <span id="exploreTotal">—</span> links shared publicly
   </div>
 </div>
 
-<!-- Trending tags -->
 <div class="trending-tags-wrap">
   <div class="trending-label">Trending tags</div>
   <div id="trendingTags" class="trending-tags"></div>
 </div>
 
-<!-- Links grid -->
 <div class="explore-content">
   <div id="exploreGrid" class="links-grid explore-grid"></div>
   <div id="exploreEmpty" class="empty-state hidden">
-    <div class="empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+    <div class="empty-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </div>
     <h3>No public links yet</h3>
-    <p>Be the first to share something!</p>
-    <a href="/" class="btn-primary">Add your links →</a>
+    <p>Be the first to share something with the community</p>
+    <a href="/" class="btn-primary">Add your links</a>
   </div>
   <div id="exploreLoadMore" class="load-more-wrap hidden">
     <button class="btn-ghost" onclick="exploreLoadMore()">Load more</button>

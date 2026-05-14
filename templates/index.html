@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LinkVault — Your Personal Link Library</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/style.css">
 <link rel="stylesheet" href="/static/css/auth.css">
 </head>
@@ -26,24 +27,39 @@
       <span>LinkVault</span>
     </div>
     <div class="land-nav-actions">
-      <button class="btn-ghost" onclick="showPanel('login')">Sign In</button>
-      <button class="btn-primary" onclick="showPanel('register')">Get Started</button>
+      <button class="btn-ghost" onclick="showPanel('login')">Sign in</button>
+      <button class="btn-primary" onclick="showPanel('register')">Get started</button>
     </div>
   </nav>
 
   <div class="hero">
-    <div class="hero-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 2l2.2 7.8H22l-6.6 4.8 2.5 7.8L12 17.6l-5.9 4.8 2.5-7.8L2 9.8h7.8z"/></svg>Your personal link library</div>
+    <div class="hero-badge">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+      Your personal link library
+    </div>
     <h1 class="hero-title">Stop losing<br><span class="grad-text">important links</span></h1>
-    <p class="hero-sub">Save, organize, and rediscover every link that matters. Search instantly, share publicly, keep privately — all in one beautiful place.</p>
+    <p class="hero-sub">Save, organize, and rediscover every link that matters. Search instantly, share publicly, keep privately.</p>
     <div class="hero-actions">
-      <button class="btn-primary btn-lg" onclick="showPanel('register')">Start for free →</button>
+      <button class="btn-primary btn-lg" onclick="showPanel('register')">Start for free</button>
       <a href="/explore" class="btn-ghost btn-lg">Browse public links</a>
     </div>
     <div class="hero-features">
-      <div class="feat"><span class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Auto-fetch title & preview</div>
-      <div class="feat"><span class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>Full-text search</div>
-      <div class="feat"><span class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>Tags & collections</div>
-      <div class="feat"><span class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>Public & private links</div>
+      <div class="feat">
+        <span class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+        Auto-fetch metadata
+      </div>
+      <div class="feat">
+        <span class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        Full-text search
+      </div>
+      <div class="feat">
+        <span class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
+        Tags &amp; collections
+      </div>
+      <div class="feat">
+        <span class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+        Public &amp; private
+      </div>
     </div>
   </div>
 </section>
@@ -51,12 +67,14 @@
 <!-- Auth Panel -->
 <div class="auth-overlay hidden" id="authOverlay" onclick="hidePanel()"></div>
 <div class="auth-panel" id="authPanel">
-  <button class="panel-close" onclick="hidePanel()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  <button class="panel-close" onclick="hidePanel()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
 
   <!-- Login -->
   <div class="auth-form" id="loginForm">
     <h2>Welcome back</h2>
-    <p class="auth-sub">Sign in to your LinkVault</p>
+    <p class="auth-sub">Sign in to your LinkVault account</p>
 
     <div id="loginError" class="error-msg hidden"></div>
 
@@ -64,7 +82,6 @@
       <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
       Continue with Google
     </a>
-
     <div class="divider"><span>or</span></div>
 
     <div class="field">
@@ -75,14 +92,14 @@
       <label>Password</label>
       <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
     </div>
-    <button class="btn-primary btn-full" onclick="doLogin()">Sign In</button>
-    <p class="switch-auth">No account? <a onclick="switchTo('register')">Create one →</a></p>
+    <button class="btn-primary btn-full" onclick="doLogin()">Sign in</button>
+    <p class="switch-auth">No account? <a onclick="switchTo('register')">Create one</a></p>
   </div>
 
   <!-- Register -->
   <div class="auth-form hidden" id="registerForm">
     <h2>Create account</h2>
-    <p class="auth-sub">Join LinkVault — it's free</p>
+    <p class="auth-sub">Join LinkVault — free forever</p>
 
     <div id="registerError" class="error-msg hidden"></div>
 
@@ -90,11 +107,10 @@
       <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
       Sign up with Google
     </a>
-
     <div class="divider"><span>or</span></div>
 
     <div class="field">
-      <label>Full Name</label>
+      <label>Full name</label>
       <input type="text" id="regName" placeholder="Your name" autocomplete="name">
     </div>
     <div class="field">
@@ -105,8 +121,8 @@
       <label>Password <span class="hint">(min 6 chars)</span></label>
       <input type="password" id="regPassword" placeholder="••••••••" autocomplete="new-password">
     </div>
-    <button class="btn-primary btn-full" onclick="doRegister()">Create Account</button>
-    <p class="switch-auth">Have an account? <a onclick="switchTo('login')">Sign in →</a></p>
+    <button class="btn-primary btn-full" onclick="doRegister()">Create account</button>
+    <p class="switch-auth">Already have an account? <a onclick="switchTo('login')">Sign in</a></p>
   </div>
 </div>
 
