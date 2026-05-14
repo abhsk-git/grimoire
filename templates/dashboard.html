@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/style.css">
 <link rel="stylesheet" href="/static/css/dashboard.css">
+<script>(function(){var t=localStorage.getItem('lv-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 <body class="app-body">
 
@@ -105,6 +106,30 @@
       </div>
     </div>
     <div class="topbar-right">
+      <div class="theme-switcher">
+        <button class="theme-toggle" onclick="toggleThemePicker()" title="Switch theme">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <div class="theme-picker hidden" id="themePicker">
+          <div class="theme-picker-title">Theme</div>
+          <div class="theme-option" data-theme="light" onclick="applyTheme('light')">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#f7f8fc 50%,#4f46e5 50%)"></span>
+            <span>Light</span><span class="theme-check"></span>
+          </div>
+          <div class="theme-option" data-theme="dark" onclick="applyTheme('dark')">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#07070e 50%,#6366f1 50%)"></span>
+            <span>Dark</span><span class="theme-check"></span>
+          </div>
+          <div class="theme-option" data-theme="geek" onclick="applyTheme('geek')">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#f4f7f2 50%,#2f8d46 50%)"></span>
+            <span>Geek</span><span class="theme-check"></span>
+          </div>
+          <div class="theme-option" data-theme="midnight" onclick="applyTheme('midnight')">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#020c18 50%,#00d4c0 50%)"></span>
+            <span>Midnight</span><span class="theme-check"></span>
+          </div>
+        </div>
+      </div>
       <div class="view-toggles">
         <button class="view-btn active" id="gridBtn" onclick="setLayout('grid')" title="Grid view">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
@@ -327,6 +352,7 @@
 <!-- Toast -->
 <div class="toast hidden" id="toast"></div>
 
+<script src="/static/js/theme.js"></script>
 <script src="/static/js/dashboard.js"></script>
 </body>
 </html>
