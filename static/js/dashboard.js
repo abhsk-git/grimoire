@@ -68,7 +68,7 @@ function buildCard(link) {
   <div class="link-card" data-id="${link.id}">
     <div class="card-media ${link.image ? '' : 'card-media--empty'}">
       ${link.image
-        ? `<img class="card-image" src="${esc(link.image)}" alt="" onerror="this.parentElement.classList.add('card-media--empty');this.remove()">`
+        ? `<img class="card-image" src="${esc(link.image)}" alt="" onerror="this.parentElement.classList.add('card-media--empty');this.parentElement.insertAdjacentHTML('afterbegin','<div class=\\'domain-initial\\'>${initial}</div>');this.remove()">`
         : `<div class="domain-initial">${initial}</div>`}
     </div>
     <span class="${link.is_public ? 'badge-public' : 'badge-private'}">${link.is_public ? 'Public' : 'Private'}</span>
