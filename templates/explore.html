@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/style.css">
 <link rel="stylesheet" href="/static/css/explore.css">
+<link rel="stylesheet" href="/static/css/blog.css">
 <link rel="stylesheet" href="/static/css/auth.css">
 <script>(function(){var t=localStorage.getItem('lv-theme')||'geek';document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
@@ -28,6 +29,10 @@
     <div id="exploreNavAuth">
       <a href="/dashboard" class="btn-primary">My Dashboard</a>
     </div>
+    <a href="/write" id="writeBtn" class="btn-ghost hidden" title="Write a post" style="display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:none;font-size:13px;font-weight:600;color:var(--text2);text-decoration:none;transition:all .15s">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      Write
+    </a>
     <div class="theme-switcher">
       <button class="theme-toggle" onclick="toggleThemePicker()" title="Switch theme">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -56,16 +61,36 @@
 </header>
 
 <div class="explore-hero">
-  <h1>Discover public links</h1>
-  <p>Resources, tools, and articles shared by the community</p>
+  <h1 id="heroTitle">Discover. Read. Share.</h1>
+  <p id="heroSub">Links, stories, and resources from the community</p>
   <div class="explore-counts">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-    <span id="exploreTotal">—</span> links shared publicly
+    <span id="modeIcon">🔗</span>
+    <span id="exploreTotal">—</span> <span id="countLabel">links shared publicly</span>
+  </div>
+</div>
+
+<!-- Mode tabs -->
+<div class="mode-tabs-wrap">
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-links" onclick="switchMode('links')">
+      <div class="mode-tab-icon">🔗</div>
+      <div>
+        <span class="tab-label">Links</span>
+        <span class="tab-desc">Bookmarks &amp; resources</span>
+      </div>
+    </button>
+    <button class="mode-tab" id="tab-blog" onclick="switchMode('blog')">
+      <div class="mode-tab-icon">✍️</div>
+      <div>
+        <span class="tab-label">Blog</span>
+        <span class="tab-desc">Stories &amp; articles</span>
+      </div>
+    </button>
   </div>
 </div>
 
 <div class="trending-tags-wrap">
-  <div class="trending-label">Trending tags</div>
+  <div class="trending-label" id="trendingLabel">Trending tags</div>
   <div id="trendingTags" class="trending-tags"></div>
 </div>
 
@@ -75,9 +100,9 @@
     <div class="empty-icon">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
     </div>
-    <h3>No public links yet</h3>
-    <p>Be the first to share something with the community</p>
-    <button class="btn-primary" onclick="showPanel('register')">Add your links</button>
+    <h3 id="emptyTitle">No public links yet</h3>
+    <p id="emptyDesc">Be the first to share something with the community</p>
+    <button class="btn-primary" id="emptyAction" onclick="showPanel('register')">Add your links</button>
   </div>
   <div id="exploreLoadMore" class="load-more-wrap hidden">
     <button class="btn-ghost" onclick="exploreLoadMore()">Load more</button>
@@ -142,6 +167,12 @@
   </div>
 </div>
 
+<script>
+// Parse ?mode= and ?tag= from URL on load
+const _urlp = new URLSearchParams(location.search);
+const _initMode = _urlp.get('mode') === 'blog' ? 'blog' : 'links';
+const _initTag  = _urlp.get('tag') || null;
+</script>
 <script src="/static/js/theme.js"></script>
 <script src="/static/js/auth.js"></script>
 <script src="/static/js/explore.js"></script>

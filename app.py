@@ -26,10 +26,12 @@ def create_app():
     from blueprints.auth import bp as auth_bp
     from blueprints.links import bp as links_bp
     from blueprints.explore import bp as explore_bp
+    from blueprints.blog import bp as blog_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(links_bp)
     app.register_blueprint(explore_bp)
+    app.register_blueprint(blog_bp)
 
     @app.route('/favicon.ico')
     def favicon():

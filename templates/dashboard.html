@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/style.css">
 <link rel="stylesheet" href="/static/css/dashboard.css">
+<link rel="stylesheet" href="/static/css/blog.css">
 <script>(function(){var t=localStorage.getItem('lv-theme')||'geek';document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 <body class="app-body">
@@ -42,6 +43,14 @@
     <a class="nav-item" href="/explore">
       <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
       <span class="nav-label">Explore</span>
+    </a>
+    <a class="nav-item" onclick="setView('posts')" data-view="posts">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
+      <span class="nav-label">My Posts</span>
+    </a>
+    <a class="nav-item" href="/write">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+      <span class="nav-label">New Post</span>
     </a>
   </nav>
 
@@ -173,12 +182,32 @@
   </div>
 
   <!-- Links area -->
-  <div class="links-header">
+  <div class="links-header" id="linksHeaderBar">
     <h2 class="links-title" id="linksTitle">All Links</h2>
     <span class="links-count" id="linksCount"></span>
   </div>
 
   <div id="linksGrid" class="links-grid"></div>
+
+  <!-- My Posts area (hidden by default) -->
+  <div id="postsArea" class="hidden">
+    <div class="links-header">
+      <h2 class="links-title" style="color:var(--accent2)">My Posts</h2>
+      <a href="/write" class="btn-primary" style="font-size:13px;padding:8px 16px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Post
+      </a>
+    </div>
+    <div id="postsListEl" class="posts-list"></div>
+    <div id="postsEmpty" class="empty-state hidden">
+      <div class="empty-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <h3>No posts yet</h3>
+      <p>Start writing and share your story with the world</p>
+      <a href="/write" class="btn-primary">Write your first post</a>
+    </div>
+  </div>
 
   <div id="emptyState" class="empty-state hidden">
     <div class="empty-icon">

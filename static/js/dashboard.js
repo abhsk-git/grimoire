@@ -322,9 +322,90 @@ function setView(view) {
     el.classList.toggle('active', el.dataset.view === view);
   });
   document.querySelectorAll('.col-item, .tag-pill').forEach(el => el.classList.remove('active'));
+
+  const linksArea   = document.getElementById('linksGrid');
+  const postsArea   = document.getElementById('postsArea');
+  const statsBar    = document.querySelector('.stats-bar');
+  const linksHeader = document.getElementById('linksHeaderBar');
+  const emptyState  = document.getElementById('emptyState');
+  const loadMore    = document.getElementById('loadMoreWrap');
+
+  if (view === 'posts') {
+    linksArea.classList.add('hidden');
+    if (statsBar)    statsBar.classList.add('hidden');
+    if (linksHeader) linksHeader.classList.add('hidden');
+    if (emptyState)  emptyState.classList.add('hidden');
+    if (loadMore)    loadMore.classList.add('hidden');
+    postsArea.classList.remove('hidden');
+    loadMyPosts();
+    return;
+  }
+
+  postsArea.classList.add('hidden');
+  linksArea.classList.remove('hidden');
+  if (statsBar)    statsBar.classList.remove('hidden');
+  if (linksHeader) linksHeader.classList.remove('hidden');
+
   const titles = { all: 'All Links', public: 'Public Links', private: 'Private Links' };
   document.getElementById('linksTitle').textContent = titles[view] || 'Links';
   loadLinks();
+}
+
+async function loadMyPosts() {
+  try {
+    const r = await fetch('/api/blog/my-posts', { credentials: 'include' });
+    const posts = await r.json();
+    renderMyPosts(posts);
+  } catch (e) {
+    showToast('Could not load posts', 'error');
+  }
+}
+
+function renderMyPosts(posts) {
+  const el    = document.getElementById('postsListEl');
+  const empty = document.getElementById('postsEmpty');
+  if (!posts.length) { el.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  el.innerHTML = posts.map(p => {
+    const date = p.updated_at
+      ? new Date(p.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      : '';
+    return `
+    <div class="post-list-item">
+      <div class="post-list-cover">
+        ${p.cover_image
+          ? `<img src="${esc(p.cover_image)}" alt="">`
+          : '✍️'}
+      </div>
+      <div class="post-list-info">
+        <div class="post-list-title">${esc(p.title)}</div>
+        <div class="post-list-meta">${date} · ${p.reading_time} min read · ${p.views} views · ${p.likes} likes</div>
+      </div>
+      <span class="post-list-status ${p.status}">${p.status}</span>
+      <div class="post-list-actions">
+        <a href="/write/${p.id}" class="btn-icon" title="Edit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </a>
+        ${p.status === 'published'
+          ? `<a href="/blog/${esc(p.slug)}" target="_blank" class="btn-icon" title="View post">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+             </a>`
+          : ''}
+        <button class="btn-icon danger" title="Delete" onclick="deleteMyPost(${p.id})">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function deleteMyPost(id) {
+  if (!confirm('Delete this post permanently?')) return;
+  try {
+    await fetch(`/api/blog/posts/${id}`, { method: 'DELETE', credentials: 'include' });
+    loadMyPosts();
+    showToast('Post deleted');
+  } catch {}
 }
 
 function filterCollection(id) {
