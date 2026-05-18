@@ -1,4 +1,4 @@
-/* ── LinkVault — Global Design System ──────────────────────── */
+/* ── Grimoire — Global Design System ───────────────────────── */
 
 /* ─── Theme 1: Light (default, no data-theme attr) ─────────── */
 :root {
@@ -362,7 +362,7 @@ select option { background: var(--bg2); }
 }
 .logo svg { flex-shrink: 0; }
 .logo-text { transition: color .15s; }
-@media (max-width: 520px) { .logo-text { display: none; } }
+@media (max-width: 300px) { .logo-text { display: none; } }
 
 /* ── Divider ─────────────────────────────────────────────────── */
 .divider { display: flex; align-items: center; gap: 12px; color: var(--text3); font-size: 12px; }
@@ -560,7 +560,13 @@ select option { background: var(--bg2); }
   border-top: 1px solid rgba(47,141,70,0.15);
 }
 [data-theme="geek"] .auth-panel { background: #ffffff; }
-[data-theme="geek"] .hero-title { letter-spacing: -0.01em; }
+[data-theme="geek"] .hero-title { letter-spacing: -0.01em; font-size: clamp(22px, 6.8vw, 68px); }
+[data-theme="midnight"] .hero-title { font-size: clamp(22px, 6.8vw, 68px); }
+/* mono font is wider — shrink feat tags on desktop so all 4 stay on one line */
+@media (min-width: 601px) {
+  [data-theme="geek"] .feat,
+  [data-theme="midnight"] .feat { font-size: 11px; padding: 8px 16px; }
+}
 [data-theme="geek"] .link-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08), var(--shadow-glow); }
 [data-theme="geek"] .orb-1 { background: radial-gradient(circle, #2f8d46 0%, transparent 70%); opacity: 0.1; }
 [data-theme="geek"] .orb-2 { background: radial-gradient(circle, #1a6634 0%, transparent 70%); opacity: 0.07; }

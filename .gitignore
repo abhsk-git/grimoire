@@ -8,3 +8,6 @@ __pycache__/
 *.log
 CLAUDE.md
 restart.txt
+
+# User uploads
+static/uploads/

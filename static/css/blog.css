@@ -443,7 +443,7 @@
   text-align: center !important;
   display: block !important;
   transition: opacity .15s !important;
-  box-shadow: 0 2px 8px rgba(99,102,241,0.25) !important;
+  box-shadow: 0 2px 8px var(--accent-border) !important;
 }
 .image-tool .cdx-button:hover { opacity: 0.85 !important; }
 .image-tool__image-url {

@@ -146,7 +146,8 @@
   border-radius: var(--radius-sm); padding: 0 14px;
   flex: 1; max-width: 520px; transition: border-color .2s, box-shadow .2s;
 }
-.search-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+.search-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+.search-wrap input:focus { box-shadow: none; }
 .search-icon { color: var(--text3); display: flex; flex-shrink: 0; }
 .search-wrap input {
   background: transparent; border: none; outline: none;
