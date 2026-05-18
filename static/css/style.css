@@ -356,10 +356,11 @@ select option { background: var(--bg2); }
 
 /* ── Logo ────────────────────────────────────────────────────── */
 .logo {
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 9px;
   font-family: 'Rajdhani', sans-serif; font-size: 19px; font-weight: 700;
-  letter-spacing: 0.06em; color: var(--text); text-decoration: none;
+  letter-spacing: 0.07em; color: var(--text); text-decoration: none;
 }
+.logo svg { flex-shrink: 0; }
 .logo-text { transition: color .15s; }
 @media (max-width: 520px) { .logo-text { display: none; } }
 
