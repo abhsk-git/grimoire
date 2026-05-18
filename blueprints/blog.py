@@ -546,9 +546,9 @@ def rss_feed():
     xml = f'''<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>LinkVault Blog</title>
+    <title>Grimoire</title>
     <link>{host}/explore</link>
-    <description>Stories and articles from the LinkVault community</description>
+    <description>Stories and articles from the Grimoire community</description>
     {items}
   </channel>
 </rss>'''

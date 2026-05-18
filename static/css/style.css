@@ -357,9 +357,11 @@ select option { background: var(--bg2); }
 /* ── Logo ────────────────────────────────────────────────────── */
 .logo {
   display: flex; align-items: center; gap: 10px;
-  font-family: var(--font-display); font-size: 17px; font-weight: 700;
-  color: var(--text); text-decoration: none;
+  font-family: 'Rajdhani', sans-serif; font-size: 19px; font-weight: 700;
+  letter-spacing: 0.06em; color: var(--text); text-decoration: none;
 }
+.logo-text { transition: color .15s; }
+@media (max-width: 520px) { .logo-text { display: none; } }
 
 /* ── Divider ─────────────────────────────────────────────────── */
 .divider { display: flex; align-items: center; gap: 12px; color: var(--text3); font-size: 12px; }

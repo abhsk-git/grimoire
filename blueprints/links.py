@@ -15,7 +15,7 @@ def fetch_meta():
     if not url.startswith('http'):
         url = 'https://' + url
     try:
-        headers = {'User-Agent': 'Mozilla/5.0 (compatible; LinkVault/1.0)'}
+        headers = {'User-Agent': 'Mozilla/5.0 (compatible; Grimoire/1.0)'}
         r = http_requests.get(url, headers=headers, timeout=8, allow_redirects=True)
         soup = BeautifulSoup(r.text, 'html.parser')
 
