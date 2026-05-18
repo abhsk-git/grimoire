@@ -3,7 +3,8 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+_here = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(_here, 'config', '.env'))
 
 from extensions import oauth
 from utils import verify_token
