@@ -148,7 +148,7 @@
 }
 @media (max-width: 600px) {
   .land-nav { padding: 13px 16px; }
-  .land-nav .logo span { display: none; }
+  .land-nav .logo .logo-text { display: none; }
   .auth-panel { padding: 40px 24px; }
   .hero { margin-top: 44px; }
   .hero-sub { font-size: 15px; margin-bottom: 32px; }
