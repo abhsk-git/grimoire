@@ -78,6 +78,10 @@ def optional_auth(f):
     return decorated
 
 # ─── Pages ─────────────────────────────────────────────────────────────────────
+@app.route('/favicon.ico')
+def favicon():
+    return app.send_static_file('favicon.svg'), 200, {'Content-Type': 'image/svg+xml'}
+
 @app.route('/')
 def index():
     return redirect('/explore')
