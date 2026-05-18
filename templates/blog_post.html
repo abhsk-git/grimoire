@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ post.title }} — LinkVault</title>
+<meta name="description" content="{{ post.excerpt or post.title }}">
+{% if post.cover_image %}
+<meta property="og:image" content="{{ post.cover_image }}">
+{% endif %}
+<meta property="og:title" content="{{ post.title }}">
+<meta property="og:type" content="article">
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/blog.css">
+<!-- Prism.js syntax highlighting -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+<script>(function(){var t=localStorage.getItem('lv-theme')||'geek';document.documentElement.setAttribute('data-theme',t);})();</script>
+</head>
+<body class="post-page">
+
+<!-- Reading progress bar -->
+<div class="read-progress" id="readProgress"></div>
+
+<!-- Top bar -->
+<header class="post-topbar">
+  <div class="post-topbar-left">
+    <a href="/explore" class="post-back-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back
+    </a>
+    <span style="color:var(--border-hover)">·</span>
+    <a href="/explore" style="font-size:13px;font-weight:700;color:var(--text2);text-decoration:none">
+      <svg width="14" height="14" viewBox="0 0 28 28" fill="none" style="vertical-align:-2px"><rect width="28" height="28" rx="8" fill="#6366f1"/><path d="M8 14h12M14 8l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      LinkVault
+    </a>
+  </div>
+  <div class="post-topbar-actions">
+    <button class="btn-like" id="topLikeBtn" onclick="toggleLike()">
+      <span class="heart">♥</span> <span id="topLikeCount">{{ post.likes }}</span>
+    </button>
+    <button class="btn-share" onclick="copyLink()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Share
+    </button>
+    {% if post.is_owner %}
+    <a href="/write/{{ post.id }}" class="post-edit-link">Edit post</a>
+    {% endif %}
+  </div>
+</header>
+
+<!-- Cover image -->
+{% if post.cover_image %}
+<div class="post-cover-wrap">
+  <img src="{{ post.cover_image }}" alt="{{ post.title }}">
+</div>
+{% endif %}
+
+<!-- Article -->
+<article class="post-article">
+
+  {% if post.tags_list %}
+  <div class="post-tag-row">
+    {% for tag in post.tags_list %}
+    <a href="/explore?mode=blog&tag={{ tag }}" class="post-article-tag">#{{ tag }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <h1 class="post-title">{{ post.title }}</h1>
+
+  <div class="post-byline">
+    <img src="{{ post.author_avatar }}"
+         alt="{{ post.author_name }}"
+         onerror="this.src='https://ui-avatars.com/api/?name={{ post.author_name|urlencode }}&size=44&background=6366f1&color=fff'">
+    <div>
+      <div class="byline-author">{{ post.author_name }}</div>
+      <div class="byline-meta">
+        {{ post.pub_date }}{% if post.pub_date %} · {% endif %}{{ post.reading_time }} min read
+        · {{ post.views }} views
+      </div>
+    </div>
+  </div>
+
+  <div class="post-content" id="postContent">
+    {{ post.content_html | safe }}
+  </div>
+
+</article>
+
+<!-- Like + Share footer -->
+<div class="post-footer-bar">
+  <button class="btn-like" id="footerLikeBtn" onclick="toggleLike()">
+    <span class="heart">♥</span>
+    <span id="footerLikeCount">{{ post.likes }}</span> Likes
+  </button>
+  <button class="btn-share" onclick="copyLink()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    Copy link
+  </button>
+  <button class="btn-share" onclick="shareTwitter()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.736-8.836L2.25 2.25h6.917l4.254 5.622 4.823-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    Tweet
+  </button>
+  {% if post.is_owner %}
+  <a href="/write/{{ post.id }}" class="post-edit-link">✎ Edit this post</a>
+  {% endif %}
+</div>
+
+<!-- Comments -->
+<div class="comments-wrap">
+  <h3 class="comments-title">Discussion</h3>
+
+  <div class="comment-form">
+    <textarea class="comment-textarea" id="commentContent"
+      placeholder="Share your thoughts, questions, or feedback…" rows="3"></textarea>
+    <div class="comment-form-row">
+      <input type="text" class="comment-name-input" id="commentName"
+        placeholder="Your name (optional, for guests)">
+      <button class="btn-primary" onclick="submitComment()" style="flex-shrink:0">Post comment</button>
+    </div>
+  </div>
+
+  <div id="commentsList"></div>
+  <div id="commentsEmpty" class="hidden" style="text-align:center;padding:32px;color:var(--text3);font-size:14px">
+    No comments yet — be the first!
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script>
+const POST_ID    = {{ post.id }};
+const USER_ID    = {{ user_id or 'null' }};
+const POST_TITLE = {{ post.title | tojson }};
+const POST_SLUG  = {{ post.slug | tojson }};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="/static/js/theme.js"></script>
+<script src="/static/js/blog_post.js"></script>
+</body>
+</html>
