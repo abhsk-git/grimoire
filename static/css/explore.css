@@ -46,11 +46,8 @@
   font-size: 17px; color: var(--text2); margin-bottom: 24px; line-height: 1.65;
   animation: heroIn .8s .1s cubic-bezier(0.16,1,0.3,1) both;
 }
-.explore-counts {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 14px; font-weight: 700; color: var(--accent2);
-  background: var(--accent-dim); border: 1px solid var(--accent-border);
-  border-radius: 100px; padding: 7px 20px;
+.explore-hero .mode-tabs {
+  display: inline-flex;
   animation: heroIn .8s .2s cubic-bezier(0.16,1,0.3,1) both;
 }
 

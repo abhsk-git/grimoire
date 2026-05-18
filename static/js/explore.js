@@ -33,16 +33,12 @@ function switchMode(newMode, initial = false) {
   const search = document.getElementById('exploreSearch');
   if (mode === 'links') {
     search.placeholder = 'Search links…';
-    document.getElementById('countLabel').textContent   = 'links shared publicly';
-    document.getElementById('modeIcon').textContent     = '🔗';
     document.getElementById('trendingLabel').textContent = 'Trending link tags';
     setEmptyState('No public links yet', 'Be the first to share something with the community', 'Add your links', () => showPanel('register'));
     loadTrendingTags();
     loadLinks(true);
   } else {
     search.placeholder = 'Search posts…';
-    document.getElementById('countLabel').textContent   = 'posts published';
-    document.getElementById('modeIcon').textContent     = '✍️';
     document.getElementById('trendingLabel').textContent = 'Popular post tags';
     setEmptyState('No blog posts yet', 'Be the first to share your story with the community', 'Start writing', () => { window.location.href = '/write'; });
     loadBlogTags();
@@ -75,7 +71,6 @@ async function loadLinks(reset = true) {
   const data = await r.json();
   linksState.items = reset ? data.links : [...linksState.items, ...data.links];
   linksState.total = data.total;
-  document.getElementById('exploreTotal').textContent = linksState.total.toLocaleString();
   renderGrid(linksState.items.map(buildLinkCard));
   document.getElementById('exploreLoadMore').classList.toggle('hidden', linksState.items.length >= linksState.total);
 }
@@ -126,7 +121,6 @@ async function loadPosts(reset = true) {
   const data = await r.json();
   blogState.items = reset ? data.posts : [...blogState.items, ...data.posts];
   blogState.total = data.total;
-  document.getElementById('exploreTotal').textContent = blogState.total.toLocaleString();
   renderGrid(blogState.items.map(buildBlogCard));
   document.getElementById('exploreLoadMore').classList.toggle('hidden', blogState.items.length >= blogState.total);
 }
