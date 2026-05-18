@@ -22,6 +22,7 @@
   color: var(--text); font-size: 14px; padding: 11px 0;
   flex: 1; font-family: var(--font-body);
 }
+.explore-search-wrap input:focus { box-shadow: none; }
 .explore-search-wrap input::placeholder { color: var(--text3); }
 .search-icon { color: var(--text3); display: flex; flex-shrink: 0; }
 #exploreNavAuth { margin-left: auto; display: flex; align-items: center; gap: 8px; }
