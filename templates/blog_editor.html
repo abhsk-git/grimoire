@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/static/css/style.css">
-<link rel="stylesheet" href="/static/css/blog.css">
+<link rel="stylesheet" href="/static/css/style.css?v=3">
+<link rel="stylesheet" href="/static/css/blog.css?v=3">
 <script>(function(){var t=localStorage.getItem('lv-theme')||'geek';document.documentElement.setAttribute('data-theme',t);})();</script>
 <!-- Editor.js core + tools -->
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest/dist/editorjs.umd.min.js"></script>
@@ -39,6 +39,11 @@
   <span style="font-size:13px;font-weight:600;color:var(--text2)" id="editingLabel">{% if post %}Editing{% else %}New Post{% endif %}</span>
   <span class="save-status" id="saveStatus">Draft</span>
   <div class="editor-topbar-right">
+    <label class="btn-upload-img" title="Upload image into post">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Upload Image
+      <input type="file" accept="image/*" id="topbarImageInput" style="display:none" onchange="topbarUploadImage(this)">
+    </label>
     <button class="btn-settings" onclick="toggleSettings()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       Settings
@@ -54,14 +59,15 @@
 <main class="editor-main">
 
   <!-- Cover image zone -->
-  <div class="editor-cover-zone" id="coverZone" onclick="openCoverModal()">
+  <label class="editor-cover-zone" id="coverZone" for="coverFileInput">
+    <input type="file" id="coverFileInput" accept="image/*" style="display:none" onchange="handleCoverFile(this)">
     <div class="cover-placeholder" id="coverPlaceholder">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       <span>Add cover image</span>
     </div>
     <img id="coverPreviewImg" style="display:none;width:100%;height:100%;object-fit:cover" src="" alt="">
     <button class="cover-remove-btn" onclick="removeCover(event)">Remove</button>
-  </div>
+  </label>
 
   <!-- Title -->
   <textarea class="editor-title-input" id="postTitle" placeholder="Post title…" rows="1"
@@ -139,7 +145,7 @@ const POST_ID   = {{ post.id if post else 'null' }};
 const POST_DATA = {{ post.content | tojson if post and post.content else 'null' }};
 const POST_STATUS = '{{ post.status if post else "draft" }}';
 </script>
-<script src="/static/js/theme.js"></script>
-<script src="/static/js/blog_editor.js"></script>
+<script src="/static/js/theme.js?v=3"></script>
+<script src="/static/js/blog_editor.js?v=3"></script>
 </body>
 </html>

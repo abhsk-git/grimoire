@@ -59,8 +59,37 @@ function initEditor() {
       marker:     { class: Marker },
       underline:  { class: Underline },
     },
-    onChange: () => { scheduleAutosave(); updateStats(); }
+    onChange: () => { scheduleAutosave(); updateStats(); },
+    onReady: () => { injectImageTips(); }
   });
+}
+
+function injectImageTips() {
+  // no-op: tips handled via topbar upload button
+}
+
+// ── Topbar image upload ───────────────────────────────────────
+async function topbarUploadImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const label = input.closest('label');
+  label.classList.add('uploading');
+  label.childNodes[1].textContent = ' Uploading…';
+  try {
+    const fd = new FormData();
+    fd.append('image', file);
+    const r = await fetch('/api/blog/upload', { method: 'POST', body: fd, credentials: 'include' });
+    const data = await r.json();
+    if (!r.ok || !data.file?.url) throw new Error(data.error || 'Upload failed');
+    await editor.blocks.insert('image', { file: { url: data.file.url }, caption: '', withBorder: false, stretched: false, withBackground: false });
+    showToast('Image inserted!', 'success');
+  } catch (e) {
+    showToast(e.message, 'error');
+  } finally {
+    label.classList.remove('uploading');
+    label.childNodes[1].textContent = ' Upload Image';
+    input.value = '';
+  }
 }
 
 // ── Autosave ──────────────────────────────────────────────────
@@ -178,45 +207,62 @@ async function deletePost() {
 
 // ── Cover ─────────────────────────────────────────────────────
 function openCoverModal() {
-  const hasImage = document.getElementById('coverZone').classList.contains('has-cover');
-  if (hasImage) return;
-  const url = prompt('Paste cover image URL:');
-  if (url) {
-    document.getElementById('coverUrlInput').value = url;
-    applyCoverUrl();
+  if (document.getElementById('coverZone').classList.contains('has-cover')) return;
+  document.getElementById('coverFileInput').click();
+}
+
+async function handleCoverFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const zone = document.getElementById('coverZone');
+  zone.style.opacity = '0.5';
+  try {
+    const fd = new FormData();
+    fd.append('image', file);
+    const r = await fetch('/api/blog/upload', { method: 'POST', body: fd, credentials: 'include' });
+    const data = await r.json();
+    if (!r.ok || !data.file?.url) throw new Error(data.error || 'Upload failed');
+    setCover(data.file.url);
+  } catch (e) {
+    showToast(e.message, 'error');
+  } finally {
+    zone.style.opacity = '';
+    input.value = '';
   }
+}
+
+function setCover(url) {
+  const zone = document.getElementById('coverZone');
+  const img  = document.getElementById('coverPreviewImg');
+  const ph   = document.getElementById('coverPlaceholder');
+  img.src = url;
+  img.style.display = 'block';
+  ph.style.display  = 'none';
+  zone.classList.add('has-cover');
+  document.getElementById('coverUrlInput').value = url;
+  const prev = document.getElementById('coverUrlPreview');
+  if (prev) { prev.src = url; prev.classList.add('visible'); }
+  scheduleAutosave();
 }
 
 function applyCoverUrl() {
   const url = document.getElementById('coverUrlInput').value.trim();
-  const zone = document.getElementById('coverZone');
-  const img  = document.getElementById('coverPreviewImg');
-  const ph   = document.getElementById('coverPlaceholder');
-  if (url) {
-    img.src = url;
-    img.style.display = 'block';
-    ph.style.display  = 'none';
-    zone.classList.add('has-cover');
-    previewCoverFromUrl(url);
-  } else {
-    removeCover(null);
-  }
-  scheduleAutosave();
+  if (url) setCover(url); else removeCover(null);
 }
 
 function previewCoverFromUrl(url) {
   const prev = document.getElementById('coverUrlPreview');
-  if (url) { prev.src = url; prev.classList.add('visible'); }
-  else { prev.src = ''; prev.classList.remove('visible'); }
+  if (prev) { prev.src = url || ''; url ? prev.classList.add('visible') : prev.classList.remove('visible'); }
 }
 
 function removeCover(e) {
-  if (e) e.stopPropagation();
+  if (e) { e.preventDefault(); e.stopPropagation(); }
   document.getElementById('coverPreviewImg').style.display = 'none';
   document.getElementById('coverPlaceholder').style.display = 'flex';
   document.getElementById('coverZone').classList.remove('has-cover');
   document.getElementById('coverUrlInput').value = '';
-  document.getElementById('coverUrlPreview').classList.remove('visible');
+  const prev = document.getElementById('coverUrlPreview');
+  if (prev) { prev.src = ''; prev.classList.remove('visible'); }
   scheduleAutosave();
 }
 

@@ -352,6 +352,14 @@
 .save-status.saved   { color: var(--success); }
 .save-status.error   { color: var(--danger); }
 .editor-topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.btn-upload-img {
+  background: var(--accent); color: #fff; font-weight: 700;
+  border: none; border-radius: var(--radius-sm); padding: 9px 16px;
+  font-size: 13px; cursor: pointer; transition: opacity .15s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-upload-img:hover { opacity: 0.85; }
+.btn-upload-img.uploading { opacity: 0.6; pointer-events: none; }
 .btn-settings {
   background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm);
   padding: 9px 14px; font-size: 13px; font-weight: 600;
@@ -419,6 +427,48 @@
 .ce-toolbar__plus:hover, .ce-toolbar__settings-btn:hover { color: var(--text) !important; background: var(--bg2) !important; }
 .cdx-block { color: var(--text); font-size: 17px; line-height: 1.8; }
 .ce-paragraph[data-placeholder]::before { color: var(--text3); }
+
+/* Image tool — make upload button prominent */
+.image-tool { padding: 12px 0; }
+.image-tool .cdx-button {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  padding: 13px 24px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  text-align: center !important;
+  display: block !important;
+  transition: opacity .15s !important;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.25) !important;
+}
+.image-tool .cdx-button:hover { opacity: 0.85 !important; }
+.image-tool__image-url {
+  margin-top: 10px !important;
+  background: var(--bg2) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+}
+.image-tool__image-url::placeholder { color: var(--text3) !important; }
+/* Hint below URL input */
+.image-tool__image-url + *,
+.image-tool__image-url::after { display: none; }
+.image-tool:not(.image-tool--filled) .image-tool__image-url {
+  border-bottom: none !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+.image-tool:not(.image-tool--filled) .image-tool__image-url ~ *:last-child { display: none; }
+/* URL warning tip */
+.image-tool__url-tip {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 4px;
+  padding: 0 2px;
+}
 
 /* ── Settings Panel ──────────────────────────────────────────── */
 .settings-overlay {
