@@ -40,13 +40,16 @@ def create_app():
 
     @app.route('/')
     def index():
-        return redirect('/explore')
+        token = request.cookies.get('token')
+        if verify_token(token):
+            return redirect('/dashboard')
+        return render_template('index.html')
 
     @app.route('/dashboard')
     def dashboard():
         token = request.cookies.get('token')
         if not verify_token(token):
-            return redirect('/explore')
+            return redirect('/')
         return render_template('dashboard.html')
 
     @app.route('/explore')
